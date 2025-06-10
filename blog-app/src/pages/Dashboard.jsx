@@ -1,10 +1,11 @@
 import React from 'react';
+import CreatePost from '../components/CreatePost.jsx';
 
 const Dashboard = () => {
 	return (
 		<div className="container mt-5">
 			<h2>👋 Welcome to Dashboard</h2>
-			<p>This page is protected, only visible to logged-in users.</p>
+			<CreatePost />
 		</div>
 	);
 };

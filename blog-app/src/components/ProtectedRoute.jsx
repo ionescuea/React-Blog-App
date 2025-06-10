@@ -1,16 +1,26 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/authContext.jsx';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../firebase';
 
 const ProtectedRoute = ({ children }) => {
-	const { user } = useAuth();
-	console.log("user in ProtectedRoute:", user);
+  const [user, loading] = useAuthState(auth);
 
-	if (!user) {
-		return <Navigate to="/login" replace />;
-	}
+if (loading) {
+  return (
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      <div className="spinner-border text-primary" role="status">
+        <span className="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  );
+}
 
-	return children;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;
