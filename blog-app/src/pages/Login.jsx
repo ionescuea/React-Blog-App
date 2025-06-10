@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -9,6 +9,16 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        // Persistence is set
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +31,7 @@ const Login = () => {
         // Register new user
         await createUserWithEmailAndPassword(auth, email, password);
       }
-      navigate('/'); // Redirect after successful login/signup
+      navigate('/dashboard'); // Redirect after successful login/signup
     } catch (err) {
       setError(err.message);
     }

@@ -1,14 +1,21 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { useAuth } from '../context/Auth.jsx';
+import { useAuth } from '../context/authContext.jsx';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 function AppNavbar() {
 	const { user } = useAuth();
+	const navigate = useNavigate();
 
 	const handleLogout = async () => {
-		await signOut(auth);
+		try {
+			await signOut(auth);
+			navigate('/'); // Redirect to home after logout
+		} catch (error) {
+			console.error('Logout error:', error);
+		}
 	};
 
 	return (
