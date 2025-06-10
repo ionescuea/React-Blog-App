@@ -1,8 +1,16 @@
-// Navbar.jsx
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { useAuth } from '../context/Auth.jsx';
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
 
 function AppNavbar() {
+	const { user } = useAuth();
+
+	const handleLogout = async () => {
+		await signOut(auth);
+	};
+
 	return (
 		<Navbar bg="light" expand="lg" className="shadow-sm">
 			<Container>
@@ -16,17 +24,18 @@ function AppNavbar() {
 					/>
 					BlogApp
 				</Navbar.Brand>
-				<Navbar.Toggle aria-controls="basic-navbar-nav" />
-				<Navbar.Collapse id="basic-navbar-nav">
+				<Navbar.Toggle />
+				<Navbar.Collapse>
 					<Nav className="me-auto">
 						<Nav.Link href="/news">News</Nav.Link>
 					</Nav>
-					<Nav className="ms-auto d-flex align-items-center gap-3">
-						<Button variant="outline-primary">Login</Button>
-						<a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer">Facebook</a>
-						<a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-						<a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer">Twitter</a>
-						<a href="https://instagram.com/yourprofile" target="_blank" rel="noopener noreferrer">Instagram</a>
+					<Nav className="ms-auto gap-3">
+						<a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+						{user ? (
+							<Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
+						) : (
+							<Button variant="outline-primary" href="/login">Login</Button>
+						)}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>
